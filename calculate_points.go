@@ -23,7 +23,7 @@ import (
 func CalculatePoints(receipt *Receipt) int {
 	total, err := strconv.ParseFloat(receipt.Total, 64)
 	if err != nil {
-		log.Println("Total was not a valid dollar value.")
+		log.Println("Total was not a valid dollar value: " + err.Error())
 		return 0
 	}
 
@@ -79,7 +79,7 @@ func PointsFromItemDescriptionLength(items []Item) int {
 
 		price, err := strconv.ParseFloat(item.Price, 64)
 		if err != nil {
-			log.Println("Price was not a valid dollar value.")
+			log.Println("Price was not a valid dollar value: " + err.Error())
 			continue
 		}
 
@@ -92,7 +92,7 @@ func PointsFromItemDescriptionLength(items []Item) int {
 func PointsFromPurchaseDayBeingOdd(purchaseDate string) int {
 	t, err := time.Parse(time.DateOnly, purchaseDate)
 	if err != nil {
-		log.Println("Invalid purchase date.")
+		log.Println("Invalid purchase date: " + err.Error())
 	}
 
 	if t.Day()%2 == 1 {
