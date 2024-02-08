@@ -69,6 +69,36 @@ func TestPointsFromQuartersExample2(t *testing.T) {
 	}
 }
 
+func TestPointsFromItemPairsExample1(t *testing.T) {
+	points := PointsFromItemPairs(receipt1.Items)
+	if points != 10 {
+		t.Fatalf("Expected 10 points, got %d", points)
+	}
+}
+
+func TestPointsFromItemPairsExample2(t *testing.T) {
+	points := PointsFromItemPairs(receipt2.Items)
+	if points != 10 {
+		t.Fatalf("Expected 10 points, got %d", points)
+	}
+}
+
+func TestPointsFromItemPairsThreeItems(t *testing.T) {
+	items := make([]Item, 3)
+	points := PointsFromItemPairs(items)
+	if points != 5 {
+		t.Fatalf("Expected 5 points, got %d", points)
+	}
+}
+
+func TestPointsFromItemPairsFiveItems(t *testing.T) {
+	items := make([]Item, 7)
+	points := PointsFromItemPairs(items)
+	if points != 15 {
+		t.Fatalf("Expected 15 points, got %d", points)
+	}
+}
+
 func unmarshalToReceipt(input string) *Receipt {
 	receipt := new(Receipt)
 	// Intentionally ignoring errors, this is a unit test helper.

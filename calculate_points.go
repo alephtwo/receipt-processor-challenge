@@ -17,7 +17,7 @@ func CalculatePoints(receipt *Receipt) int {
 	return PointsFromAlphanumerics(receipt.Retailer) +
 		PointsFromRoundDollarAmount(total) +
 		PointsFromQuarters(total) +
-		pointsFromItemPairs(receipt) +
+		PointsFromItemPairs(receipt.Items) +
 		pointsFromItemDescriptionLength(receipt) +
 		pointsFromPurchaseDayBeingOdd(receipt) +
 		pointsFromPurchaseTimeBetween2And4(receipt)
@@ -51,8 +51,8 @@ func PointsFromQuarters(total float64) int {
 }
 
 // 5 points for every two items on the receipt.
-func pointsFromItemPairs(receipt *Receipt) int {
-	return 0
+func PointsFromItemPairs(items []Item) int {
+	return (len(items) / 2) * 5
 }
 
 // If the trimmed length of the item description is a multiple of 3,
