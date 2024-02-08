@@ -53,6 +53,22 @@ func TestPointsFromRoundDollarAmountExample2(t *testing.T) {
 	}
 }
 
+func TestPointsFromQuartersExample1(t *testing.T) {
+	total, _ := strconv.ParseFloat(receipt1.Total, 64)
+	points := PointsFromQuarters(total)
+	if points != 0 {
+		t.Fatalf("Expected 0 points, got %d", points)
+	}
+}
+
+func TestPointsFromQuartersExample2(t *testing.T) {
+	total, _ := strconv.ParseFloat(receipt2.Total, 64)
+	points := PointsFromQuarters(total)
+	if points != 25 {
+		t.Fatalf("Expected 25 points, got %d", points)
+	}
+}
+
 func unmarshalToReceipt(input string) *Receipt {
 	receipt := new(Receipt)
 	// Intentionally ignoring errors, this is a unit test helper.

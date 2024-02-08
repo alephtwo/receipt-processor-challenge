@@ -16,7 +16,7 @@ func CalculatePoints(receipt *Receipt) int {
 
 	return PointsFromAlphanumerics(receipt.Retailer) +
 		PointsFromRoundDollarAmount(total) +
-		pointsFromQuarters(total) +
+		PointsFromQuarters(total) +
 		pointsFromItemPairs(receipt) +
 		pointsFromItemDescriptionLength(receipt) +
 		pointsFromPurchaseDayBeingOdd(receipt) +
@@ -43,7 +43,10 @@ func PointsFromRoundDollarAmount(total float64) int {
 }
 
 // 25 points if the total is a multiple of 0.25.
-func pointsFromQuarters(total float64) int {
+func PointsFromQuarters(total float64) int {
+	if math.Mod(total, 0.25) == 0 {
+		return 25
+	}
 	return 0
 }
 
