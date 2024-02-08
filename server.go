@@ -5,7 +5,7 @@ import (
 	"github.com/google/uuid"
 )
 
-var receipts map[uuid.UUID]int
+var receipts = make(map[uuid.UUID]int)
 
 func main() {
 	app := fiber.New()
