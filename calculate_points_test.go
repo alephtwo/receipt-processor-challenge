@@ -113,6 +113,34 @@ func TestPointsFromItemDescriptionLengthExample2(t *testing.T) {
 	}
 }
 
+func TestPointsFromPurchaseDayBeingOddExample1(t *testing.T) {
+	points := PointsFromPurchaseDayBeingOdd(receipt1.PurchaseDate)
+	if points != 6 {
+		t.Fatalf("Expected 6 points, got %d", points)
+	}
+}
+
+func TestPointsFromPurchaseDayBeingOddExample2(t *testing.T) {
+	points := PointsFromPurchaseDayBeingOdd(receipt2.PurchaseDate)
+	if points != 0 {
+		t.Fatalf("Expected 0 points, got %d", points)
+	}
+}
+
+func TestPointsFromPurchaseTimeBetween2And4Example1(t *testing.T) {
+	points := PointsFromPurchaseTimeBetween2And4(receipt1.PurchaseDate)
+	if points != 0 {
+		t.Fatalf("Expected 0 points, got %d", points)
+	}
+}
+
+func TestPointsFromPurchaseTimeBetween2And4Example2(t *testing.T) {
+	points := PointsFromPurchaseTimeBetween2And4(receipt2.PurchaseDate)
+	if points != 10 {
+		t.Fatalf("Expected 10 points, got %d", points)
+	}
+}
+
 func unmarshalToReceipt(input string) *Receipt {
 	receipt := new(Receipt)
 	// Intentionally ignoring errors, this is a unit test helper.

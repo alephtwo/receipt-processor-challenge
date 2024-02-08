@@ -31,8 +31,8 @@ func CalculatePoints(receipt *Receipt) int {
 		PointsFromQuarters(total) +
 		PointsFromItemPairs(receipt.Items) +
 		PointsFromItemDescriptionLength(receipt.Items) +
-		pointsFromPurchaseDayBeingOdd(receipt) +
-		pointsFromPurchaseTimeBetween2And4(receipt)
+		PointsFromPurchaseDayBeingOdd(receipt.PurchaseDate) +
+		PointsFromPurchaseTimeBetween2And4(receipt.PurchaseTime)
 }
 
 // One point for every alphanumeric character in the retailer name.
@@ -88,10 +88,10 @@ func PointsFromItemDescriptionLength(items []Item) int {
 }
 
 // 6 points if the day in the purchase date is odd.
-func pointsFromPurchaseDayBeingOdd(receipt *Receipt) int {
+func PointsFromPurchaseDayBeingOdd(purchaseDate string) int {
 	return 0
 }
 
-func pointsFromPurchaseTimeBetween2And4(receipt *Receipt) int {
+func PointsFromPurchaseTimeBetween2And4(purchaseTime string) int {
 	return 0
 }
