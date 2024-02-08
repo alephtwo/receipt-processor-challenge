@@ -6,6 +6,7 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"time"
 )
 
 // The given OpenAPI spec defines number fields as strings... so I'm trying
@@ -89,9 +90,29 @@ func PointsFromItemDescriptionLength(items []Item) int {
 
 // 6 points if the day in the purchase date is odd.
 func PointsFromPurchaseDayBeingOdd(purchaseDate string) int {
+	t, err := time.Parse(time.DateOnly, purchaseDate)
+	if err != nil {
+		log.Println("Invalid purchase date.")
+	}
+
+	if t.Day()%2 == 1 {
+		return 6
+	}
 	return 0
 }
 
+// 10 points if the time of purchase is between 2 and 4 pm.
 func PointsFromPurchaseTimeBetween2And4(purchaseTime string) int {
+	t, err := time.Parse("15:04", purchaseTime)
+	if err != nil {
+		log.Println("Invalid purchase time: " + err.Error())
+	}
+
+	// Requirements are not exactly clear, but I will assume
+	// AFTER 2 (inclusive of 2:00pm)
+	// BEFORE 4 (exclusive of 4:00pm)
+	if t.Hour() >= 14 && t.Hour() < 16 {
+		return 10
+	}
 	return 0
 }

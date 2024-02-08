@@ -128,14 +128,14 @@ func TestPointsFromPurchaseDayBeingOddExample2(t *testing.T) {
 }
 
 func TestPointsFromPurchaseTimeBetween2And4Example1(t *testing.T) {
-	points := PointsFromPurchaseTimeBetween2And4(receipt1.PurchaseDate)
+	points := PointsFromPurchaseTimeBetween2And4(receipt1.PurchaseTime)
 	if points != 0 {
 		t.Fatalf("Expected 0 points, got %d", points)
 	}
 }
 
 func TestPointsFromPurchaseTimeBetween2And4Example2(t *testing.T) {
-	points := PointsFromPurchaseTimeBetween2And4(receipt2.PurchaseDate)
+	points := PointsFromPurchaseTimeBetween2And4(receipt2.PurchaseTime)
 	if points != 10 {
 		t.Fatalf("Expected 10 points, got %d", points)
 	}
