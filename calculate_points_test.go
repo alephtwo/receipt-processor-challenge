@@ -99,6 +99,20 @@ func TestPointsFromItemPairsFiveItems(t *testing.T) {
 	}
 }
 
+func TestPointsFromItemDescriptionLengthExample1(t *testing.T) {
+	points := PointsFromItemDescriptionLength(receipt1.Items)
+	if points != 6 {
+		t.Fatalf("Expected 6 points, got %d", points)
+	}
+}
+
+func TestPointsFromItemDescriptionLengthExample2(t *testing.T) {
+	points := PointsFromItemDescriptionLength(receipt2.Items)
+	if points != 0 {
+		t.Fatalf("Expected 0 points, got %d", points)
+	}
+}
+
 func unmarshalToReceipt(input string) *Receipt {
 	receipt := new(Receipt)
 	// Intentionally ignoring errors, this is a unit test helper.
