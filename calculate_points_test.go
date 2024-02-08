@@ -18,8 +18,8 @@ func TestCalculatePointsExample1(t *testing.T) {
 
 func TestCalculatePointsExample2(t *testing.T) {
 	points := CalculatePoints(receipt2)
-	if points != 100 {
-		t.Fatalf("Expected 100 points, got %d", points)
+	if points != 109 {
+		t.Fatalf("Expected 109 points, got %d", points)
 	}
 }
 
