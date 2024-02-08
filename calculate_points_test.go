@@ -6,11 +6,7 @@ import (
 )
 
 func TestCalculatePointsExample1(t *testing.T) {
-	receipt, err := unmarshalToReceipt(example_1)
-	if err != nil {
-		t.Fatal(err)
-	}
-
+	receipt := unmarshalToReceipt(example_1)
 	points := CalculatePoints(receipt)
 	if points != 28 {
 		t.Fatalf("Expected 28 points, got %d", points)
@@ -18,23 +14,35 @@ func TestCalculatePointsExample1(t *testing.T) {
 }
 
 func TestCalculatePointsExample2(t *testing.T) {
-	receipt, err := unmarshalToReceipt(example_2)
-	if err != nil {
-		t.Fatal(err)
-	}
-
+	receipt := unmarshalToReceipt(example_2)
 	points := CalculatePoints(receipt)
 	if points != 100 {
 		t.Fatalf("Expected 100 points, got %d", points)
 	}
 }
 
-func unmarshalToReceipt(input string) (*Receipt, error) {
-	receipt := new(Receipt)
-	if err := json.Unmarshal([]byte(input), &receipt); err != nil {
-		return nil, err
+func TestPointsFromAlphanumericsExample1(t *testing.T) {
+	receipt := unmarshalToReceipt(example_1)
+	points := PointsFromAlphanumerics(receipt)
+	if points != 6 {
+		t.Fatalf("Expected 6 points, got %d", points)
 	}
-	return receipt, nil
+}
+
+func TestPointsFromAlphanumericsExample2(t *testing.T) {
+	receipt := unmarshalToReceipt(example_2)
+	points := PointsFromAlphanumerics(receipt)
+	if points != 14 {
+		t.Fatalf("Expected 14 points, got %d", points)
+	}
+}
+
+func unmarshalToReceipt(input string) *Receipt {
+	receipt := new(Receipt)
+	// Intentionally ignoring errors, this is a unit test helper.
+	// It doesn't need to be quite so robust.
+	json.Unmarshal([]byte(input), &receipt)
+	return receipt
 }
 
 var example_1 string = `{

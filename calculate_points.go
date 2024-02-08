@@ -1,7 +1,11 @@
 package main
 
+import (
+	"regexp"
+)
+
 func CalculatePoints(receipt *Receipt) int {
-	return pointsFromAlphanumerics(receipt) +
+	return PointsFromAlphanumerics(receipt) +
 		pointsFromRoundDollarAmount(receipt) +
 		pointsFromQuarters(receipt) +
 		pointsFromItemPairs(receipt) +
@@ -11,8 +15,10 @@ func CalculatePoints(receipt *Receipt) int {
 }
 
 // One point for every alphanumeric character in the retailer name.
-func pointsFromAlphanumerics(receipt *Receipt) int {
-	return 0
+func PointsFromAlphanumerics(receipt *Receipt) int {
+	regex := regexp.MustCompile("[^a-zA-Z0-9]")
+	sanitized := regex.ReplaceAllString(receipt.Retailer, "")
+	return len(sanitized)
 }
 
 // 50 points if the total is a round dollar amount with no cents.
