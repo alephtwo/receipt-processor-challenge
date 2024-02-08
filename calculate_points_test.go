@@ -2,52 +2,52 @@ package main
 
 import (
 	"encoding/json"
+	"strconv"
 	"testing"
 )
 
+var receipt1 *Receipt = unmarshalToReceipt(example1)
+var receipt2 *Receipt = unmarshalToReceipt(example2)
+
 func TestCalculatePointsExample1(t *testing.T) {
-	receipt := unmarshalToReceipt(example_1)
-	points := CalculatePoints(receipt)
+	points := CalculatePoints(receipt1)
 	if points != 28 {
 		t.Fatalf("Expected 28 points, got %d", points)
 	}
 }
 
 func TestCalculatePointsExample2(t *testing.T) {
-	receipt := unmarshalToReceipt(example_2)
-	points := CalculatePoints(receipt)
+	points := CalculatePoints(receipt2)
 	if points != 100 {
 		t.Fatalf("Expected 100 points, got %d", points)
 	}
 }
 
 func TestPointsFromAlphanumericsExample1(t *testing.T) {
-	receipt := unmarshalToReceipt(example_1)
-	points := PointsFromAlphanumerics(receipt)
+	points := PointsFromAlphanumerics(receipt1.Retailer)
 	if points != 6 {
 		t.Fatalf("Expected 6 points, got %d", points)
 	}
 }
 
 func TestPointsFromAlphanumericsExample2(t *testing.T) {
-	receipt := unmarshalToReceipt(example_2)
-	points := PointsFromAlphanumerics(receipt)
+	points := PointsFromAlphanumerics(receipt2.Retailer)
 	if points != 14 {
 		t.Fatalf("Expected 14 points, got %d", points)
 	}
 }
 
 func TestPointsFromRoundDollarAmountExample1(t *testing.T) {
-	receipt := unmarshalToReceipt(example_1)
-	points := PointsFromRoundDollarAmount(receipt)
+	total, _ := strconv.ParseFloat(receipt1.Total, 64)
+	points := PointsFromRoundDollarAmount(total)
 	if points != 0 {
 		t.Fatalf("Expected 0 points, got %d", points)
 	}
 }
 
 func TestPointsFromRoundDollarAmountExample2(t *testing.T) {
-	receipt := unmarshalToReceipt(example_2)
-	points := PointsFromRoundDollarAmount(receipt)
+	total, _ := strconv.ParseFloat(receipt2.Total, 64)
+	points := PointsFromRoundDollarAmount(total)
 	if points != 50 {
 		t.Fatalf("Expected 50 points, got %d", points)
 	}
@@ -61,7 +61,7 @@ func unmarshalToReceipt(input string) *Receipt {
 	return receipt
 }
 
-var example_1 string = `{
+var example1 string = `{
   "retailer": "Target",
   "purchaseDate": "2022-01-01",
   "purchaseTime": "13:01",
@@ -86,7 +86,7 @@ var example_1 string = `{
   "total": "35.35"
 }`
 
-var example_2 string = `{
+var example2 string = `{
   "retailer": "M&M Corner Market",
   "purchaseDate": "2022-03-20",
   "purchaseTime": "14:33",

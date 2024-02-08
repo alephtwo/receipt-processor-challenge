@@ -8,9 +8,15 @@ import (
 )
 
 func CalculatePoints(receipt *Receipt) int {
-	return PointsFromAlphanumerics(receipt) +
-		PointsFromRoundDollarAmount(receipt) +
-		pointsFromQuarters(receipt) +
+	total, err := strconv.ParseFloat(receipt.Total, 64)
+	if err != nil {
+		log.Println("Total was not a valid dollar value.")
+		return 0
+	}
+
+	return PointsFromAlphanumerics(receipt.Retailer) +
+		PointsFromRoundDollarAmount(total) +
+		pointsFromQuarters(total) +
 		pointsFromItemPairs(receipt) +
 		pointsFromItemDescriptionLength(receipt) +
 		pointsFromPurchaseDayBeingOdd(receipt) +
@@ -18,24 +24,17 @@ func CalculatePoints(receipt *Receipt) int {
 }
 
 // One point for every alphanumeric character in the retailer name.
-func PointsFromAlphanumerics(receipt *Receipt) int {
+func PointsFromAlphanumerics(retailer string) int {
 	regex := regexp.MustCompile("[^a-zA-Z0-9]")
-	sanitized := regex.ReplaceAllString(receipt.Retailer, "")
+	sanitized := regex.ReplaceAllString(retailer, "")
 	return len(sanitized)
 }
 
 // 50 points if the total is a round dollar amount with no cents.
-func PointsFromRoundDollarAmount(receipt *Receipt) int {
+func PointsFromRoundDollarAmount(total float64) int {
 	// Could also check this by just checking if the string ends with ".00".
 	// That's probably faster, but this is more robust at handling unexpected data.
-	// Especially as it pertains to dollar values, sometimes there are four decimal places.
-	// Despite the API spec outlining that this only has two... you never know.
-	total, err := strconv.ParseFloat(receipt.Total, 64)
-	if err != nil {
-		log.Println("Total was not a valid dollar value.")
-		return 0
-	}
-
+	//
 	// If the total is equal to the value of itself less any decimal positions...
 	if total == math.Trunc(total) {
 		return 50
@@ -44,7 +43,7 @@ func PointsFromRoundDollarAmount(receipt *Receipt) int {
 }
 
 // 25 points if the total is a multiple of 0.25.
-func pointsFromQuarters(receipt *Receipt) int {
+func pointsFromQuarters(total float64) int {
 	return 0
 }
 
