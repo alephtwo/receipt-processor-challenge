@@ -1,12 +1,15 @@
 package main
 
 import (
+	"log"
+	"math"
 	"regexp"
+	"strconv"
 )
 
 func CalculatePoints(receipt *Receipt) int {
 	return PointsFromAlphanumerics(receipt) +
-		pointsFromRoundDollarAmount(receipt) +
+		PointsFromRoundDollarAmount(receipt) +
 		pointsFromQuarters(receipt) +
 		pointsFromItemPairs(receipt) +
 		pointsFromItemDescriptionLength(receipt) +
@@ -22,7 +25,21 @@ func PointsFromAlphanumerics(receipt *Receipt) int {
 }
 
 // 50 points if the total is a round dollar amount with no cents.
-func pointsFromRoundDollarAmount(receipt *Receipt) int {
+func PointsFromRoundDollarAmount(receipt *Receipt) int {
+	// Could also check this by just checking if the string ends with ".00".
+	// That's probably faster, but this is more robust at handling unexpected data.
+	// Especially as it pertains to dollar values, sometimes there are four decimal places.
+	// Despite the API spec outlining that this only has two... you never know.
+	total, err := strconv.ParseFloat(receipt.Total, 64)
+	if err != nil {
+		log.Println("Total was not a valid dollar value.")
+		return 0
+	}
+
+	// If the total is equal to the value of itself less any decimal positions...
+	if total == math.Trunc(total) {
+		return 50
+	}
 	return 0
 }
 

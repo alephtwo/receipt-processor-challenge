@@ -37,6 +37,22 @@ func TestPointsFromAlphanumericsExample2(t *testing.T) {
 	}
 }
 
+func TestPointsFromRoundDollarAmountExample1(t *testing.T) {
+	receipt := unmarshalToReceipt(example_1)
+	points := PointsFromRoundDollarAmount(receipt)
+	if points != 0 {
+		t.Fatalf("Expected 0 points, got %d", points)
+	}
+}
+
+func TestPointsFromRoundDollarAmountExample2(t *testing.T) {
+	receipt := unmarshalToReceipt(example_2)
+	points := PointsFromRoundDollarAmount(receipt)
+	if points != 50 {
+		t.Fatalf("Expected 50 points, got %d", points)
+	}
+}
+
 func unmarshalToReceipt(input string) *Receipt {
 	receipt := new(Receipt)
 	// Intentionally ignoring errors, this is a unit test helper.
