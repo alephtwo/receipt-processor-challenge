@@ -18,3 +18,9 @@ If you've got `node` and `python` installed, you can run `./test.sh`, which is a
 quickly-builty script designed to test the API iteratively and quickly. Postman,
 Thunder Client, etc. are all options available, but this was quick enough to
 scrap together that it seemed unwarranted to go much further at this point.
+
+## TODO
+
+- Add mutation testing with [ooze](https://github.com/gtramontina/ooze). A
+  preliminary run shows that there are numerous mutants which could be dealt
+  with to improve overall test quality.
