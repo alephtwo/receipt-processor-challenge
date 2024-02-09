@@ -8,12 +8,15 @@ import (
 var receipts = make(map[uuid.UUID]int)
 
 func main() {
-	app := fiber.New()
+	app := CreateApp()
+	app.Listen(":8080")
+}
 
+func CreateApp() *fiber.App {
+	app := fiber.New()
 	app.Post("/receipts/process", processReceipt)
 	app.Get("/receipts/:id/points", getPoints)
-
-	app.Listen(":8080")
+	return app
 }
 
 func processReceipt(c *fiber.Ctx) error {
