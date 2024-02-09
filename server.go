@@ -27,7 +27,10 @@ func processReceipt(c *fiber.Ctx) error {
 		return c.SendStatus(fiber.StatusBadRequest)
 	}
 
-	points := CalculatePoints(receipt)
+	points, err := CalculatePoints(receipt)
+	if err != nil {
+		return c.SendStatus(fiber.StatusBadRequest)
+	}
 
 	id := uuid.New()
 	receipts[id] = points

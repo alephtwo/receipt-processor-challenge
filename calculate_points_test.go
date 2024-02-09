@@ -12,12 +12,12 @@ var receipt1 *Receipt = unmarshalToReceipt(exampleReceiptJson1)
 var receipt2 *Receipt = unmarshalToReceipt(exampleReceiptJson2)
 
 func TestCalculatePointsExample1(t *testing.T) {
-	points := CalculatePoints(receipt1)
+	points, _ := CalculatePoints(receipt1)
 	assert.Equal(t, 28, points)
 }
 
 func TestCalculatePointsExample2(t *testing.T) {
-	points := CalculatePoints(receipt2)
+	points, _ := CalculatePoints(receipt2)
 	assert.Equal(t, 109, points)
 }
 
@@ -78,32 +78,32 @@ func TestPointsFromItemPairsFiveItems(t *testing.T) {
 }
 
 func TestPointsFromItemDescriptionLengthExample1(t *testing.T) {
-	points := PointsFromItemDescriptionLength(receipt1.Items)
+	points, _ := PointsFromItemDescriptionLength(receipt1.Items)
 	assert.Equal(t, 6, points)
 }
 
 func TestPointsFromItemDescriptionLengthExample2(t *testing.T) {
-	points := PointsFromItemDescriptionLength(receipt2.Items)
+	points, _ := PointsFromItemDescriptionLength(receipt2.Items)
 	assert.Equal(t, 0, points)
 }
 
 func TestPointsFromPurchaseDayBeingOddExample1(t *testing.T) {
-	points := PointsFromPurchaseDayBeingOdd(receipt1.PurchaseDate)
+	points, _ := PointsFromPurchaseDayBeingOdd(receipt1.PurchaseDate)
 	assert.Equal(t, 6, points)
 }
 
 func TestPointsFromPurchaseDayBeingOddExample2(t *testing.T) {
-	points := PointsFromPurchaseDayBeingOdd(receipt2.PurchaseDate)
+	points, _ := PointsFromPurchaseDayBeingOdd(receipt2.PurchaseDate)
 	assert.Equal(t, 0, points)
 }
 
 func TestPointsFromPurchaseTimeBetween2And4Example1(t *testing.T) {
-	points := PointsFromPurchaseTimeBetween2And4(receipt1.PurchaseTime)
+	points, _ := PointsFromPurchaseTimeBetween2And4(receipt1.PurchaseTime)
 	assert.Equal(t, 0, points)
 }
 
 func TestPointsFromPurchaseTimeBetween2And4Example2(t *testing.T) {
-	points := PointsFromPurchaseTimeBetween2And4(receipt2.PurchaseTime)
+	points, _ := PointsFromPurchaseTimeBetween2And4(receipt2.PurchaseTime)
 	assert.Equal(t, 10, points)
 }
 

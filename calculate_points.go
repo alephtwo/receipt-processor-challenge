@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"math"
 	"regexp"
 	"strconv"
@@ -20,20 +19,37 @@ import (
 // each given data point. Clearly we are doing math on these values,
 // and math should (ideally) be done with numbers!
 
-func CalculatePoints(receipt *Receipt) int {
+func CalculatePoints(receipt *Receipt) (int, error) {
 	total, err := strconv.ParseFloat(receipt.Total, 64)
 	if err != nil {
-		log.Println("Total was not a valid dollar value: " + err.Error())
-		return 0
+		return 0, err
 	}
 
-	return PointsFromAlphanumerics(receipt.Retailer) +
-		PointsFromRoundDollarAmount(total) +
-		PointsFromQuarters(total) +
-		PointsFromItemPairs(receipt.Items) +
-		PointsFromItemDescriptionLength(receipt.Items) +
-		PointsFromPurchaseDayBeingOdd(receipt.PurchaseDate) +
-		PointsFromPurchaseTimeBetween2And4(receipt.PurchaseTime)
+	points := 0
+	points += PointsFromAlphanumerics(receipt.Retailer)
+	points += PointsFromRoundDollarAmount(total)
+	points += PointsFromQuarters(total)
+	points += PointsFromItemPairs(receipt.Items)
+
+	pointsFromDesc, err := PointsFromItemDescriptionLength(receipt.Items)
+	if err != nil {
+		return 0, err
+	}
+	points += pointsFromDesc
+
+	pointsFromPurchaseDay, err := PointsFromPurchaseDayBeingOdd(receipt.PurchaseDate)
+	if err != nil {
+		return 0, err
+	}
+	points += pointsFromPurchaseDay
+
+	pointsFromPurchaseTime, err := PointsFromPurchaseTimeBetween2And4(receipt.PurchaseTime)
+	if err != nil {
+		return 0, err
+	}
+	points += pointsFromPurchaseTime
+
+	return points, nil
 }
 
 // One point for every alphanumeric character in the retailer name.
@@ -68,7 +84,7 @@ func PointsFromItemPairs(items []Item) int {
 // If the trimmed length of the item description is a multiple of 3,
 // multiply the price by 0.2 and round up to the nearest integer.
 // The result is the number of points earned.
-func PointsFromItemDescriptionLength(items []Item) int {
+func PointsFromItemDescriptionLength(items []Item) (int, error) {
 	total := 0
 	for _, item := range items {
 		length := len(strings.TrimSpace(item.ShortDescription))
@@ -79,40 +95,39 @@ func PointsFromItemDescriptionLength(items []Item) int {
 
 		price, err := strconv.ParseFloat(item.Price, 64)
 		if err != nil {
-			log.Println("Price was not a valid dollar value: " + err.Error())
-			continue
+			return 0, err
 		}
 
 		total += int(math.Ceil(price * 0.2))
 	}
-	return total
+	return total, nil
 }
 
 // 6 points if the day in the purchase date is odd.
-func PointsFromPurchaseDayBeingOdd(purchaseDate string) int {
+func PointsFromPurchaseDayBeingOdd(purchaseDate string) (int, error) {
 	t, err := time.Parse(time.DateOnly, purchaseDate)
 	if err != nil {
-		log.Println("Invalid purchase date: " + err.Error())
+		return 0, err
 	}
 
 	if t.Day()%2 == 1 {
-		return 6
+		return 6, nil
 	}
-	return 0
+	return 0, nil
 }
 
 // 10 points if the time of purchase is between 2 and 4 pm.
-func PointsFromPurchaseTimeBetween2And4(purchaseTime string) int {
+func PointsFromPurchaseTimeBetween2And4(purchaseTime string) (int, error) {
 	t, err := time.Parse("15:04", purchaseTime)
 	if err != nil {
-		log.Println("Invalid purchase time: " + err.Error())
+		return 0, err
 	}
 
 	// Requirements are not exactly clear, but I will assume
 	// AFTER 2 (inclusive of 2:00pm)
 	// BEFORE 4 (exclusive of 4:00pm)
 	if t.Hour() >= 14 && t.Hour() < 16 {
-		return 10
+		return 10, nil
 	}
-	return 0
+	return 0, nil
 }

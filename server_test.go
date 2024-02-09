@@ -63,6 +63,15 @@ func testPoints(t *testing.T, app *fiber.App, id string, points int) {
 	assert.Equal(t, points, pointsResponse.Points)
 }
 
+func TestInvalidJsonSentToProcess(t *testing.T) {
+	app := CreateApp()
+
+	req := httptest.NewRequest("POST", "/receipts/process", strings.NewReader("{}"))
+	req.Header.Set("Content-Type", "application/json")
+	resp, _ := app.Test(req)
+	assert.Equal(t, 400, resp.StatusCode)
+}
+
 func TestPointsInvalidId(t *testing.T) {
 	app := CreateApp()
 	req := httptest.NewRequest("GET", "/receipts/1a57debd-e627-4e0d-8898-0d98b9a412f1/points", nil)
